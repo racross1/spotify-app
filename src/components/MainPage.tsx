@@ -1,3 +1,5 @@
+import Search from './Search'
+
 async function getCurrentUserProfile(token: string) {
   const response = await fetch('https://api.spotify.com/v1/me', {
     headers: {
@@ -10,8 +12,6 @@ async function getCurrentUserProfile(token: string) {
   }
 
   const data = await response.json();
-
-  console.log(data);
 }
 
 interface MainPageProps {
@@ -27,11 +27,8 @@ const MainPage: React.FC<MainPageProps> = ({ token }) => {
 
   return (
     <div>
-      <h1>Main Page</h1>
-      <button onClick={handleClick}>
-        Get Current User Profile
-      </button>
-    
+      <h3>Search your saved albums, episodes and tracks</h3>
+      {token && <Search token={token}/>}
     </div>
   );
 }

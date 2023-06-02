@@ -3,8 +3,6 @@ export async function fetchAccessToken(code: string) {
   const redirectUri = 'http://localhost:3000';
   const codeVerifier = localStorage.getItem('code_verifier');
 
-  console.log('codeVerifier', codeVerifier)
-
   const body = new URLSearchParams({
     grant_type: 'authorization_code',
     code: code,

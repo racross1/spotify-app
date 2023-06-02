@@ -24,3 +24,39 @@
   cursor: pointer;
   font-size: 16px;
 }
+
+/* Search.tsx */
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.pagination__link {
+  margin: 0 2px;
+  padding: 5px
+}
+
+/* search list items*/
+.list-item {
+  display: flex;
+  align-items: center;
+  height: 10px;
+}
+
+.list-item-image {
+  height: 100%;
+  object-fit: cover;
+}
+
+.list-item-name,
+.list-item-type {
+  margin-left: 10px;
+}

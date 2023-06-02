@@ -24,10 +24,8 @@ function App() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    console.log("URL CODE",code);
 
     if (code) {
-      console.log('Using code:', code);
       fetchAccessToken(code)
       .then((accessToken) => {
         if (accessToken) {
@@ -62,9 +60,6 @@ function App() {
   } else {
     return (
       <div className="App">
-        <header className="App-header">
-          Spotify App
-        </header>
         {token ? <MainPage token={token}/> : <LoginPage /> }
       </div>
     )
