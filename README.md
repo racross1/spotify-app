@@ -1,46 +1,28 @@
-# Getting Started with Create React App
+# Welcome to Yoodli Spotify App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
+## Using the app
+To run the app, run the following command in your terminal
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Transcription Implementation Write-up:
+For lyric transcription I am assuming that the music transcription feature is associated with a media player. With that in mind, I would display the text below or to the side of the media player. Key information that a user might want to see is text-highlighting that is synced with the media's timestamp and/ or text that is written/becomes visible in association with the timestamp. As a result, a key feature of implementation would be determining how to associate lyrics with the media being played. In the absence of lyrics syncing with the timestamp exactly, the lyrics could appear in a container of a fixed size that the user can scroll through at their own pace, or that automatically scrolls at a speed associated with the metadata of the song. Use cases and edge cases for the transcription might depend on the third party API or app being used to transcribe. Some use and edge cases include: what to display when multiple singers are harmonzing or are singing at the same time with different lyrics, instrumental breaks, long pauses in the music, non-word vocalizations etc. Users may have different preferences with regard to lyrics display, and so lyric transcription should include the ability to toggle the settings related to the transcription. Some things a user might want to be able to toggle are: whether the lyrics appear at all, whether the lyrics appear below or to the side of the media player, whether the lyrics include real time highlighting/ display or are available all at once so that the user can scroll through themselves. Overall, key considerations for this display would be to ensure the lyrics are available in the way and to the extent the user wants them, and that the lyrics are visible and readable without creating clutter. A key point in thinking about how the lyrics should be displayed includes thinking about user interaction with the lyrics and why/ how they might want to see them.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## TODOs
+There are TODOs included throughought this code to highlight places in which features could be added or improved. In addition to those todos, below are high level updates and areas for refactoring that would be included in an update:
 
-### `npm test`
+### Login session persistance and refactoring reauthentication logic
+Currently authentication data is cleared each time the App renders. This is a temporary means to ensure the user is directed to login each time they access the app, in the absence of logout functionality. At present it also means that when a user hits refresh they will be redirected to login, which is not disirable behavior. With additional time, the login logic would be refactored to allow session persistence and logout functionality would be added.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Refactor fetching of data
+Currently all of a user's data is fetched when the Main Page is displayed after login. If a user has a large amount of data, this leads to a delay in the page loading which is not desirable. Refector would include possible refactor of when data is fetched relative to when search is run. Longer term and more in depth refactor would include use of caching.
 
-### `npm run build`
+### Styling refactor
+Curently size styling is done with px. A refactor would include changing this to rem to make layouts more responsive on different screen sizes. Additionally, styling for different screen sizes would be added with @media.
+The styling for all components is currently in App.css. Refactor would also include creating separate CSS files for each component.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Additional detail on results
+Either additional fields in the results table, or user ability to click on an item and go to a show page for that item with additional details.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Testing
+Add testing to ensure more robust and reliable code. Additional manual testing would be done as well to determine additional edge cases that need to be accounted for in styling.

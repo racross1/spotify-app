@@ -11,7 +11,8 @@ function App() {
   useEffect(() => {
     /*
       currently clearing tokens when app opens so that user is always redirected to login.
-      this is for the purpose of take home exercise only
+      this is for the purpose of take home exercise only.
+      this means user will also return to login page on page refresh.
       see related TODOs below
     */
     // TODO: add logout functionality
@@ -30,8 +31,7 @@ function App() {
       .then((accessToken) => {
         if (accessToken) {
           setToken(accessToken);
-          localStorage.setItem('access_token', accessToken);  // Save access token to local storage
-          //window.history.pushState({}, '', window.location.pathname);
+          localStorage.setItem('access_token', accessToken);
         }
         setLoading(false);
       })
