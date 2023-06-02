@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent, useCallback } from 'react';
 import SearchListItem from './SearchListItem';
 import ReactPaginate from 'react-paginate'; 
 import '../App.css'
@@ -52,64 +52,53 @@ const Search = ({ token }: { token: string }) => {
       setTracks(fetchedTracks.filter(Boolean));
       setEpisodes(fetchedEpisodes.filter(Boolean));
   
-      setIsDataLoaded(true);  // All data has been fetched
+      // Submit button on form is disabled until all data has loaded
+      setIsDataLoaded(true);  
     }
   
     fetchData();
   }, [token]);
   
-  const fetchSavedDataPage = async (endpoint: string, offset: number) => {
-    const limit = 50;  // Maximum allowed value
-  
-    const response: Response = await fetch(`https://api.spotify.com/v1/me/${endpoint}?limit=${limit}&offset=${offset}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-  
-    if (!response.ok) {
-      throw new Error(`HTTP status ${response.status}`);
-    }
-  
-    const data: {items: RawSpotifyItem[]} = await response.json();
-    return data.items
-  }
-  
-  async function fetchAllSavedData(endpoint: 'albums' | 'tracks' | 'episodes'): Promise<SpotifyItem[]> {
-    let results: SpotifyItem[] = [];
-  
-    const fetchPage = async (url: string) => {
-      const response: Response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token}`
+  /*
+  TODO: refactor data fetching.
+    currently if a user has a large amount of data the page will take a few seconds to load.
+    to avoid submitting empty form, the submit button is disabled until all data has loaded (sub-optimal UX).
+  */
+    const fetchAllSavedData = useCallback(async (endpoint: 'albums' | 'tracks' | 'episodes'): Promise<SpotifyItem[]> => {
+        let results: SpotifyItem[] = [];
+        
+        const fetchPage = async (url: string) => {
+            const response: Response = await fetch(url, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+            });
+        
+            const data: {items: RawSpotifyItem[], next: string | null} = await response.json();
+        
+            switch (endpoint) {
+            case 'albums':
+                results = [...results, ...data.items.map((item: RawSpotifyItem) => item.album).filter((item): item is SpotifyItem => item !== undefined)];
+                break;
+            case 'tracks':
+                results = [...results, ...data.items.map((item: RawSpotifyItem) => item.track).filter((item): item is SpotifyItem => item !== undefined)];
+                break;
+            case 'episodes':
+                results = [...results, ...data.items.map((item: RawSpotifyItem) => item.episode).filter((item): item is SpotifyItem => item !== undefined)];
+                break;
+            }
+        
+            // If there's a next page, fetch it recursively
+            if (data.next) {
+            await fetchPage(data.next);
+            }
         }
-      });
-  
-      const data: {items: RawSpotifyItem[], next: string | null} = await response.json();
-  
-      switch (endpoint) {
-        case 'albums':
-          results = [...results, ...data.items.map((item: RawSpotifyItem) => item.album).filter((item): item is SpotifyItem => item !== undefined)];
-          break;
-        case 'tracks':
-          results = [...results, ...data.items.map((item: RawSpotifyItem) => item.track).filter((item): item is SpotifyItem => item !== undefined)];
-          break;
-        case 'episodes':
-          results = [...results, ...data.items.map((item: RawSpotifyItem) => item.episode).filter((item): item is SpotifyItem => item !== undefined)];
-          break;
-      }
-  
-      // If there's a next page, fetch it recursively
-      if (data.next) {
-        await fetchPage(data.next);
-      }
-    }
-  
-    // Start fetching the first page
-    await fetchPage(`https://api.spotify.com/v1/me/${endpoint}`);
-  
-    return results;
-  }
+        
+        await fetchPage(`https://api.spotify.com/v1/me/${endpoint}`);
+        
+        return results;
+        }, [token]);
+      
   
   const search = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -121,7 +110,6 @@ const Search = ({ token }: { token: string }) => {
     }
 
     setIsLoading(true); 
-    // Filter the saved albums, tracks, and episodes based on the query
     const filteredAlbums = albums.filter(album => 
       album.name && album.name.toLowerCase().includes(queryLowercase)
     )
@@ -132,20 +120,18 @@ const Search = ({ token }: { token: string }) => {
       episode.name && episode.name.toLowerCase().includes(queryLowercase)
     );
 
-    // Combine the filtered results
     const combinedResults = [...filteredAlbums, ...filteredTracks, ...filteredEpisodes];
 
-    // Update the state
     setResults(combinedResults);
 
-    setIsLoading(false); // Set loading state to false
+    setIsLoading(false);
     setCurrentPage(0)
 }
 
 const clearResults = () => {
-    setResults([]);   // Clear results
-    setQuery('');     // Clear the input box
-    setCurrentPage(0) // Reset page number
+    setResults([]);
+    setQuery('');
+    setCurrentPage(0)
 };
 
   if (isLoading) {

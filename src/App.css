@@ -28,6 +28,11 @@
   font-size: 16px;
 }
 
+.black-button:disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
+}
+
 .search-input[type="text"] {
   padding: 10px;
   border-radius: 24px;

@@ -46,9 +46,6 @@ export default function LoginPage() {
       // Create code challenge
       const codeChallenge = await generateCodeChallenge(codeVerifier);
 
-      // Generate state
-      const state = generateRandomString(16);
-
       window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&code_challenge_method=S256&code_challenge=${codeChallenge}&scope=${encodeURIComponent(scopes)}`;
     }
 
