@@ -113,11 +113,14 @@ const Search = ({ token }: { token: string }) => {
   
   const search = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
-    setIsLoading(true); 
 
     const queryLowercase = query.toLowerCase();
+    
+    if (query.trim() === '') {
+        return;
+    }
 
+    setIsLoading(true); 
     // Filter the saved albums, tracks, and episodes based on the query
     const filteredAlbums = albums.filter(album => 
       album.name && album.name.toLowerCase().includes(queryLowercase)
@@ -139,6 +142,11 @@ const Search = ({ token }: { token: string }) => {
     setCurrentPage(0)
 }
 
+const clearResults = () => {
+    setResults([]);   // Clear results
+    setQuery('');     // Clear the input box
+    setCurrentPage(0) // Reset page number
+};
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -148,10 +156,17 @@ const Search = ({ token }: { token: string }) => {
     <div>
       <form onSubmit={search}>
         <input type="text" value={query} onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)} />
-        <button type="submit" disabled={!isDataLoaded}>Search</button>
+        <button className="black-button" type="submit" disabled={!isDataLoaded}>Search</button>
+        <button className="black-button" type="button" onClick={clearResults}>Clear</button>
       </form>
       <div>
+      {results.length > 1 && <h3>Results: {results.length}</h3> }
+      {results.length > 1 && <table>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Type</th>
         {currentPageData}
+        </table>}
         {pageCount > 1 && <ReactPaginate
           previousLabel={'← Previous'}
           nextLabel={'Next →'}

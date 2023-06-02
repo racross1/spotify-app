@@ -53,7 +53,7 @@ export default function LoginPage() {
     }
 
   return  <div className="login-page">
-      <button onClick={() => {
+      <button className="black-button" onClick={() => {
       initiatePKCEFlow();
       }}>
         Login with Spotify

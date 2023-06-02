@@ -27,7 +27,7 @@ const MainPage: React.FC<MainPageProps> = ({ token }) => {
 
   return (
     <div>
-      <h3>Search your saved albums, episodes and tracks</h3>
+      <h2>Search your saved albums, episodes and tracks</h2>
       {token && <Search token={token}/>}
     </div>
   );
