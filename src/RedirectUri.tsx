@@ -1,6 +1,6 @@
 export async function fetchAccessToken(code: string) {
-  const clientId = '7814d95ad24f4c998373425cb72a1ae3';
-  const redirectUri = 'http://localhost:3000';
+  const clientId = process.env.REACT_APP_CLIENT_ID || ''
+  const redirectUri = process.env.REACT_APP_REDIRECT_URI || ''
   const codeVerifier = localStorage.getItem('code_verifier');
 
   const body = new URLSearchParams({

@@ -26,8 +26,8 @@ async function generateCodeChallenge(codeVerifier: string) {
 }
 
 export default function LoginPage() {
-  const clientId = '7814d95ad24f4c998373425cb72a1ae3';
-  const redirectUri = 'http://localhost:3000';
+  const clientId = process.env.REACT_APP_CLIENT_ID || ''
+  const redirectUri = process.env.REACT_APP_REDIRECT_URI || ''
   const scopes = 'user-read-private user-read-email user-library-read user-read-playback-state';
 
   useEffect(() => {
